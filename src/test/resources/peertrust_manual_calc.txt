@@ -1,0 +1,15 @@
+Manual calculation steps for PeerTrust sanity test.
+
+/*
+ * T(Alice) is calculated as 0.9 * T(Bob)/(T(Bob)+T(Bob)) + 0.8 *
+ * T(Bob)/(T(Bob)+T(Bob)) and because T(Bob) is initialized to 0.25,
+ * T(Alice) = 0.85. T(Bob)
+ * 
+ * T(Bob) is calculated similarly, but because we have already
+ * calculated T(Alice), T(Bob) = 0.8 * 0.85/(0.85+0.85) + 0.9 *
+ * 0.85/(0.85+0.85) = 0.85.
+ * 
+ * T(Charlie) is (0.7 + 0.8 + 0.9) * (T(Dan)/(3∗T(Dan)+3∗T(Bob))) + (0.5
+ * + 0.4 + 0.2) * (T(Dan)/(3∗T(Dan)+3∗T(Bob))), which is 0.475. Because
+ * no agent has interacted with Dan, T(Dan) = 0.25.
+ */
