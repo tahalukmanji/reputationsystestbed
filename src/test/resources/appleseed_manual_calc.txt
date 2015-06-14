@@ -1,0 +1,62 @@
+Manual calculation steps for Appleseed sanity test
+
+Simple scenario: a trusts b with reputation score of 1.0, and b trust c with reputation score of 1.0.
+
+//Initial values
+d = 0.85
+in0(a) = 1
+trust0(a) = 0
+i = 0
+V0 = {a}
+Tc = ??
+
+//Algorithm starts here...
+i = 1
+V1 = {a}
+in1(a) = 0
+trust1(a) = trust0(a) + (1 - d).in0(a) = 0 + 0.15 * 1 = 0.15
+V1 = {a, b}
+trust1(b) = 0
+in1(b) = 0
+w = 1/1 = 1
+in1(b) = in1(b) + d * in0(a) * w = 0 + 0.85 * 1 * 1 = 0.85
+m = max{(trust1(a) - trust0(a)), (trust1(b) - trust0(b))} = max{0.15, 0} = 0.15
+   
+i = 2
+V2 = {a, b}
+in2(a) = 0
+in2(b) = 0
+-
+trust2(a) = trust1(a) + (1 - d) * in1(a) = 0.15 + 0.15 * 0 = 0.15
+w = W(a,b)/ W(a,b) = 1
+in2(b) = in2(b) + 0.85 * in1(a) * w = 0 + 0.85 * 0 * 1 = 0
+-
+trust2(b) = trust1(b) + (1 - d) * in1(b) = 0 + 0.15 * 0.85 = 0.1275
+w = W(b,a)/(W(b,a)+W(b,c)) = 1/2 = 0.5
+in2(a) = in2(a) + 0.85 * in1(b) * w = 0 + 0.85 * 0.85 * 0.5 = 0.36125
+V2 = {a, b, c}
+trust2(c) = 0
+in2(c) = 0
+w = W(b,c)/(W(b,a)+W(b,c)) = 0.5
+in2(c) = in2(c) + 0.85 * in1(b) * w = 0 + 0.85 * 0.85 * 0.5 = 0.36125
+m = max{(trust2(a) - trust1(a)), (trust2(b) - trust1(b)), (trust2(c) - trust1(c))} = max{0, 0.1275, 0} = 0.1275
+
+i = 3
+V3 = {a, b, c}
+in3(a) = 0
+in3(b) = 0
+in3(c) = 0
+-
+trust3(a) = trust2(a) + 0.15 * in2(a) = 0.15 + 0.15 * 0 = 0.15
+w = 1
+in3(b) = in3(b) + 0.85 * in2(a) * 1 = 0 + 0.85 * 0.36125 = 0.3070625
+-
+trust3(b) = trust2(b) + 0.15 * in2(b) = 0.1275 + 0.15 * 0 = 0.1275
+w = 0.5
+in3(a) = in3(a) + 0.85 * in2(b) * 0.5 = 0 + 0.85 * 0 * 0.5 = 0
+in3(c) = in3(c) + 0.85 * in2(b) * 0.5 = 0
+-
+trust3(c) = trust2(c) + 0.15 * in2(c) = 0 + 0.15 * 0.36125 = 0.0541875
+w = 1
+in3(a) = in3(a) + 0.15 * in2(c) * 1 = 0.3070625 + 0.15 * 0.36125 * 1 = 0.36125
+m = max{0.15, 0, 0.0541875} = 0.0541875
